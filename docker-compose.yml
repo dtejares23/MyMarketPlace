@@ -1,0 +1,30 @@
+services:
+  cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://avnadmin:AVNS_1-TTYC3zUI_yQKDpGwI@pg-dtejares-acknowledgement-receipt-generator.e.aivencloud.com:10088/MyMarketPlace?sslmode=require
+      - REDIS_URL=redis://cache:6379
+      - JWT_SECRET=supersecretkey123
+    depends_on:
+      - cache
+
+  storefront:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  admin:
+    build: ./admin
+    ports:
+      - "3001:80"
+    depends_on:
+      - api
