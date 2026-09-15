@@ -1,0 +1,6 @@
+docker compose build api
+docker compose run --rm api pytest -v test_main.py
+
+
+docker compose up --build
+ docker compose up --build -d
